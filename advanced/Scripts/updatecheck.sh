@@ -61,6 +61,11 @@ if [[ "$2" == "remote" ]]; then
     GITHUB_FTL_VERSION="$(json_extract tag_name "$(curl -s 'https://api.github.com/repos/pi-hole/FTL/releases/latest' 2> /dev/null)")"
     echo -n " ${GITHUB_FTL_VERSION}" >> "${GITHUB_VERSION_FILE}"
 
+    if [[ "${PIHOLE_DOCKER_TAG}" ]]; then
+        GITHUB_DOCKER_VERSION="$(json_extract tag_name "$(curl -s 'https://api.github.com/repos/pi-hole/docker-pi-hole/releases/latest' 2> /dev/null)")"
+        echo -n " ${GITHUB_DOCKER_VERSION}" >> "${GITHUB_VERSION_FILE}"
+    fi
+
 else
 
     LOCAL_BRANCH_FILE="/etc/pihole/localbranches"
@@ -90,5 +95,9 @@ else
 
     FTL_VERSION="$(pihole-FTL version)"
     echo -n " ${FTL_VERSION}" >> "${LOCAL_VERSION_FILE}"
+
+    if [[ "${PIHOLE_DOCKER_TAG}" ]]; then
+        echo -n " ${PIHOLE_DOCKER_TAG}" >> "${LOCAL_VERSION_FILE}"
+    fi
 
 fi
