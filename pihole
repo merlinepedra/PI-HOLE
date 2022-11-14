@@ -63,14 +63,22 @@ arpFunc() {
 }
 
 updatePiholeFunc() {
-  shift
-  "${PI_HOLE_SCRIPT_DIR}"/update.sh "$@"
-  exit 0
+  if [ -n "${DOCKER_VERSION}" ]; then
+    unsupportedFunc
+  else
+    shift
+    "${PI_HOLE_SCRIPT_DIR}"/update.sh "$@"
+    exit 0
+  fi
 }
 
 reconfigurePiholeFunc() {
-  /etc/.pihole/automated\ install/basic-install.sh --reconfigure
-  exit 0;
+  if [ -n "${DOCKER_VERSION}" ]; then
+    unsupportedFunc
+  else
+    /etc/.pihole/automated\ install/basic-install.sh --reconfigure
+    exit 0;
+  fi
 }
 
 updateGravityFunc() {
@@ -91,8 +99,12 @@ chronometerFunc() {
 
 
 uninstallFunc() {
-  "${PI_HOLE_SCRIPT_DIR}"/uninstall.sh
-  exit 0
+  if [ -n "${DOCKER_VERSION}" ]; then
+    unsupportedFunc
+  else
+    "${PI_HOLE_SCRIPT_DIR}"/uninstall.sh
+    exit 0
+  fi
 }
 
 versionFunc() {
@@ -426,6 +438,11 @@ tricorderFunc() {
 
 updateCheckFunc() {
   "${PI_HOLE_SCRIPT_DIR}"/updatecheck.sh "$@"
+  exit 0
+}
+
+unsupportedFunc(){
+  echo "Function not supported in Docker images"
   exit 0
 }
 
