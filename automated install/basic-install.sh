@@ -1388,10 +1388,10 @@ installConfigs() {
         # and if the Web server conf directory does not exist,
         if [[ ! -d "/etc/lighttpd" ]]; then
             # make it and set the owners
-            install -d -o "${USER}" -g root /etc/lighttpd
+            install -d -m 755 -o "${USER}" -g root /etc/lighttpd
         fi
-        # ensure we always set the right permissions to the directory
-        chmod 0755 /etc/lighttpd
+        # ensure pihole user (other) can access the directory
+        chmod o+x /etc/lighttpd
         # if the config file already exists
         if [[ -f "${lighttpdConfig}" ]]; then
             # back up the original
